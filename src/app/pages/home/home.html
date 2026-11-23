@@ -1,0 +1,167 @@
+<div class="app">
+  <aside class="sidebar">
+    <span class="brand"><span class="brand-icon">B</span> Biblioteca</span>
+
+    <div class="stat">
+      <b>{{ livros().length }}</b>
+      <span>livros no acervo</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <span class="user">Olá, {{ usuario }}</span>
+      <button class="link" type="button" (click)="sair()">Sair</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">GESTÃO DO ACERVO</span>
+        <h1>Sua estante</h1>
+      </div>
+      <button class="button primary" type="button" (click)="novo()">+ Novo livro</button>
+    </header>
+
+    <div class="filters">
+      <input
+        class="search"
+        type="search"
+        [ngModel]="busca()"
+        (ngModelChange)="busca.set($event)"
+        autocomplete="off"
+        placeholder="Buscar por título ou autor"
+      />
+      <div class="chips">
+        <button
+          type="button"
+          class="chip"
+          [class.active]="generoFiltro() === ''"
+          (click)="generoFiltro.set('')"
+        >
+          Todos
+        </button>
+        @for (genero of generos; track genero) {
+          <button
+            type="button"
+            class="chip"
+            [class.active]="generoFiltro() === genero"
+            (click)="generoFiltro.set(genero)"
+          >
+            {{ genero }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <section class="shelf">
+      @for (livro of livrosFiltrados(); track livro.id) {
+        <article class="book">
+          <div class="cover">
+            @if (livro.capa) {
+              <img class="cover-image" [src]="livro.capa" [alt]="'Capa de ' + livro.titulo" />
+            } @else {
+              <span class="initial">{{ livro.titulo.charAt(0) }}</span>
+            }
+            <span class="genre">{{ livro.genero }}</span>
+          </div>
+          <div class="info">
+            <h3>{{ livro.titulo }}</h3>
+            <span class="author">{{ livro.autor }}</span>
+            <p>{{ livro.descricao }}</p>
+          </div>
+          <div class="actions">
+            <button type="button" (click)="editar(livro)">Editar</button>
+            <button class="delete" type="button" (click)="excluir(livro)">Excluir</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty">Nenhum livro encontrado.</p>
+      }
+    </section>
+  </main>
+</div>
+
+@if (formAberto()) {
+  <div class="overlay" (click)="cancelarEdicao()"></div>
+  <aside class="drawer">
+    <div class="drawer-title">
+      <span class="eyebrow">LIVROS</span>
+      <h2>{{ editandoId === null ? 'Novo livro' : 'Editar livro' }}</h2>
+    </div>
+    <form #form="ngForm" (ngSubmit)="salvar()">
+      <label
+        >Título
+        <input
+          name="titulo"
+          [(ngModel)]="livro.titulo"
+          required
+          maxlength="120"
+          autocomplete="off"
+          placeholder="Ex.: Dom Casmurro"
+        />
+      </label>
+      <label
+        >Autor
+        <input
+          name="autor"
+          [(ngModel)]="livro.autor"
+          required
+          maxlength="120"
+          autocomplete="off"
+          placeholder="Ex.: Machado de Assis"
+        />
+      </label>
+      <label
+        >Gênero
+        <select name="genero" [(ngModel)]="livro.genero" required>
+          <option value="" disabled>Selecione</option>
+          @for (genero of generos; track genero) {
+            <option [value]="genero">{{ genero }}</option>
+          }
+        </select>
+      </label>
+      <label
+        >Descrição
+        <textarea
+          name="descricao"
+          [(ngModel)]="livro.descricao"
+          required
+          maxlength="500"
+          rows="4"
+          placeholder="Resumo curto do livro"
+        ></textarea>
+        <small class="counter" [class.over]="livro.descricao.length > 500">
+          {{ livro.descricao.length }}/500
+          @if (livro.descricao.length > 500) {
+            · Reduza o texto para até 500 caracteres para poder salvar.
+          }
+        </small>
+      </label>
+      <div class="cover-field">
+        <span class="field-title">Capa (opcional)</span>
+        <div class="cover-preview">
+          @if (livro.capa) {
+            <img [src]="livro.capa" alt="Prévia da capa" />
+          } @else {
+            <span>Nenhuma imagem selecionada</span>
+          }
+        </div>
+        <div class="cover-actions">
+          <input #arquivo type="file" accept="image/*" hidden (change)="selecionarCapa($event)" />
+          <button class="button light" type="button" (click)="arquivo.click()">
+            {{ livro.capa ? 'Trocar imagem' : 'Escolher imagem' }}
+          </button>
+          @if (livro.capa) {
+            <button class="button light" type="button" (click)="removerCapa()">Remover</button>
+          }
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="button light" type="button" (click)="cancelarEdicao()">Cancelar</button>
+        <button class="button primary" type="submit" [disabled]="form.invalid">
+          {{ editandoId === null ? 'Cadastrar livro' : 'Salvar alterações' }}
+        </button>
+      </div>
+    </form>
+  </aside>
+}

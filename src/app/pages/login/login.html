@@ -1,0 +1,78 @@
+<div class="pagina">
+  <div class="estante" aria-hidden="true">
+    @for (coluna of colunas; track $index) {
+      <div class="coluna">
+        @for (bloco of coluna.blocos; track $index) {
+          <svg class="bloco" viewBox="0 0 16 16" shape-rendering="crispEdges">
+            @for (pixel of bloco.pixels; track $index) {
+              <rect
+                [attr.x]="pixel.x"
+                [attr.y]="pixel.y"
+                [attr.width]="pixel.largura"
+                [attr.height]="pixel.altura"
+                [attr.fill]="pixel.cor"
+              />
+            }
+          </svg>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="lampada" aria-hidden="true">
+    <span class="fio"></span>
+    <svg class="lanterna" viewBox="0 0 8 10" shape-rendering="crispEdges">
+      <rect x="3" y="0" width="2" height="1" fill="#3a3a3a" />
+      <rect x="1" y="1" width="6" height="1" fill="#4d4d4d" />
+      <rect x="1" y="2" width="6" height="5" fill="#3a3a3a" />
+      <rect x="2" y="2" width="4" height="5" fill="#ffcf4d" />
+      <rect x="3" y="3" width="2" height="3" fill="#fff3a8" />
+      <rect x="2" y="6" width="4" height="1" fill="#e59a1f" />
+      <rect x="1" y="7" width="6" height="1" fill="#4d4d4d" />
+      <rect x="2" y="8" width="4" height="1" fill="#3a3a3a" />
+      <rect x="2" y="2" width="4" height="1" fill="rgba(255,255,255,0.3)" />
+    </svg>
+  </div>
+
+  <form class="cartao">
+    <header class="cabecalho">
+      <span class="emblema">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 6.5C10.3 5.2 8 4.5 5 4.5v13c3 0 5.3.7 7 2 1.7-1.3 4-2 7-2v-13c-3 0-5.3.7-7 2z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+          <path d="M12 6.5v13" stroke="currentColor" stroke-width="1.6" />
+        </svg>
+      </span>
+      <span class="marca">Biblioteca</span>
+    </header>
+
+    <h1 class="titulo">Ficha do leitor</h1>
+    <p class="subtitulo">Identifique-se para acessar o acervo de livros.</p>
+
+    <div class="campo">
+      <label for="nome">Nome do leitor</label>
+      <input
+        id="nome"
+        [(ngModel)]="userName"
+        [ngModelOptions]="{ standalone: true }"
+        (keyup.enter)="onAccess()"
+        autocomplete="off"
+        placeholder="Digite seu nome"
+      />
+    </div>
+
+    <app-button
+      (click)="onAccess()"
+      textButton="Acessar o acervo"
+      size="100"
+      [disabled]="!userName.trim()"
+    ></app-button>
+
+    <p class="rodape">© 2026 | Biblioteca</p>
+  </form>
+</div>

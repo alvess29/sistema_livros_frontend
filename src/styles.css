@@ -1,0 +1,30 @@
+:root {
+  --primary-color: #1f5f4a;
+  --primary-dark: #17493a;
+  --accent-color: #c27c1f;
+  --error-color: #b3261e;
+  --grey-color: #6f7b75;
+  --surface-color: #f4f6f3;
+  --border-color: #dfe5e1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-color);
+  color: #26302b;
+  font-family: Inter, 'Segoe UI', sans-serif;
+}
+
+h1,
+h2 {
+  font-family: Lora, Georgia, serif;
+}

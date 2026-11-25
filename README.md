@@ -4,7 +4,7 @@ Front-end Angular do sistema de cadastro de livros, escrito em TypeScript. Conso
 
 ## Equipe
 
-### Pedro Roberto Ferreira de Lima (maior parte do front-end)
+### Pedro Roberto Ferreira de Lima
 
 Fluxo principal da aplicação, tela de livros e comunicação com a API.
 
